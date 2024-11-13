@@ -44,13 +44,18 @@ pipeline {
             }
         }
 
-    stage('Deploy to Nexus') {
-        steps {
-            withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                sh 'mvn deploy -DskipTests -DaltDeploymentRepository=nexus::default::http://192.168.1.26:8081/repository/maven-releases/ -Dnexus.username=${NEXUS_USERNAME} -Dnexus.password=${NEXUS_PASSWORD}'
+        stage('Deploy to Nexus') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    echo "Starting deployment to Nexus with id 'deploymentRepo'..."
+                    sh '''
+                        mvn deploy -DskipTests -DaltDeploymentRepository=deploymentRepo::default::http://192.168.1.26:8081/repository/maven-releases/ \
+                            -Dnexus.username=${NEXUS_USERNAME} -Dnexus.password=${NEXUS_PASSWORD}
+                    '''
+                }
             }
         }
-    }
+
 
         stage('Docker Build and Push') {
             steps {
