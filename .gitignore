@@ -1,0 +1,19 @@
+# Ignore Maven target directory
+/target/
+
+# Ignore IntelliJ IDEA files
+.idea/
+*.iml
+
+# Ignore log files
+*.log
+
+# Ignore OS generated files
+.DS_Store
+
+# Ignore Docker-related files
+.env
+docker-compose.override.yml
+
+# Ignore other temporary files
+*.tmp
