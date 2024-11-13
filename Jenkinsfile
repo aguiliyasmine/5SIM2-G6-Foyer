@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/aguiliyasmine/5SIM2-G6-Foyer.git'
+                git branch: 'aguiliyasmine-5SIM2-G6', url: 'https://github.com/aguiliyasmine/5SIM2-G6-Foyer.git'
             }
         }
 
