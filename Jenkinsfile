@@ -4,6 +4,7 @@ pipeline {
     environment {
         MYSQL_DATABASE = 'foyer'
         DOCKER_HUB_REPO = 'yasmine064/aguiliyasmine_5sim2_g6_foyer'
+        NEXUS_CREDENTIALS_ID = 'nexus-credentials'
     }
 
     triggers {
@@ -40,6 +41,14 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn package -DskipTests'
+            }
+        }
+
+        stage('Deploy to Nexus') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${env.NEXUS_CREDENTIALS_ID}", usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    sh 'mvn deploy -DskipTests -DaltDeploymentRepository=nexus::default::http://192.168.1.26:8081/repository/maven-releases/'
+                }
             }
         }
 
