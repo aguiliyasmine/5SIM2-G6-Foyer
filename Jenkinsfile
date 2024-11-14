@@ -55,31 +55,32 @@ pipeline {
         stage('Deploy to Nexus') {
             steps {
                 script {
-                    echo "Deploying to Nexus Snapshot Repository..."
+                    echo "Deploying to Nexus Release Repository..."
 
                     nexusArtifactUploader(
                         nexusVersion: 'nexus3',
                         protocol: 'http',
                         nexusUrl: '192.168.1.26:8081',
-                        repository: 'maven-snapshots', 
+                        repository: 'maven-releases', 
                         credentialsId: 'nexus-credentials',
                         groupId: 'tn.esprit.spring',
                         artifactId: 'Foyer',
-                        version: '0.0.1-SNAPSHOT',
+                        version: '0.0.1', 
                         artifacts: [
                             [
                                 artifactId: 'Foyer',
                                 classifier: '',
-                                file: 'target/Foyer-0.0.1-SNAPSHOT.jar',
+                                file: 'target/Foyer-0.0.1.jar', 
                                 type: 'jar'
                             ]
                         ]
                     )
 
-                    echo "Deployment to Nexus Snapshot Repository completed!"
+                    echo "Deployment to Nexus Release Repository completed!"
                 }
             }
         }
+
 
         stage('Docker Build and Push') {
             steps {
