@@ -51,17 +51,6 @@ pipeline {
                 sh 'mvn package -DskipTests'
             }
         }
-        stage('Delete Existing Release from Nexus') {
-            steps {
-                script {
-                    echo "Deleting existing release artifact from Nexus, if any..."
-                    sh """
-                        curl -v -X DELETE -u ${env.NEXUS_CREDENTIALS_ID_USR}:${env.NEXUS_CREDENTIALS_ID_PSW} \
-                        ${NEXUS_URL}/repository/maven-releases/${GROUP_ID.replace('.', '/')}/${ARTIFACT_ID}/${VERSION}
-                    """
-                }
-            }
-        }
         stage('Deploy to Nexus') {
             steps {
                 script {
