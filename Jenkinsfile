@@ -47,13 +47,13 @@ pipeline {
         stage('Deploy to Nexus') {
             steps {
                 script {
-                    echo "Deploying to Nexus..."
+                    echo "Deploying to Nexus Snapshot Repository..."
 
                     nexusArtifactUploader(
                         nexusVersion: 'nexus3',
                         protocol: 'http',
                         nexusUrl: '192.168.1.26:8081',
-                        repository: 'maven-releases', 
+                        repository: 'maven-snapshots', 
                         credentialsId: 'nexus-credentials',
                         groupId: 'tn.esprit.spring',
                         artifactId: 'Foyer',
@@ -68,10 +68,11 @@ pipeline {
                         ]
                     )
 
-                    echo "Deployment to Nexus completed!"
+                    echo "Deployment to Nexus Snapshot Repository completed!"
                 }
             }
         }
+
 
 
 
