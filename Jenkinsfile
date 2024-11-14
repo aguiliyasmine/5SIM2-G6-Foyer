@@ -46,15 +46,33 @@ pipeline {
 
         stage('Deploy to Nexus') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                    echo "Starting deployment to Nexus with id 'deploymentRepo'..."
-                    sh '''
-                        mvn deploy -DskipTests -DaltDeploymentRepository=deploymentRepo::default::http://192.168.1.26:8081/repository/maven-releases/ \
-                            -Dnexus.username=${NEXUS_USERNAME} -Dnexus.password=${NEXUS_PASSWORD}
-                    '''
+                script {
+                    echo "Deploying to Nexus..."
+
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: '192.168.1.26:8081',
+                        repository: 'maven-releases', 
+                        credentialsId: 'nexus-credentials',
+                        groupId: 'tn.esprit.spring',
+                        artifactId: 'Foyer',
+                        version: '0.0.1-SNAPSHOT',
+                        artifacts: [
+                            [
+                                artifactId: 'Foyer',
+                                classifier: '',
+                                file: 'target/Foyer-0.0.1-SNAPSHOT.jar',
+                                type: 'jar'
+                            ]
+                        ]
+                    )
+
+                    echo "Deployment to Nexus completed!"
                 }
             }
         }
+
 
 
         stage('Docker Build and Push') {
