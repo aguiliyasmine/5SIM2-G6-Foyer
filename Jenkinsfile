@@ -28,6 +28,14 @@ pipeline {
             steps {
                 sh 'mvn test'
             }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+                unsuccessful {
+                    echo "Tests failed but proceeding to next steps."
+                }
+            }
         }
 
         stage('SonarQube Analysis') {
@@ -72,9 +80,6 @@ pipeline {
                 }
             }
         }
-
-
-
 
         stage('Docker Build and Push') {
             steps {
